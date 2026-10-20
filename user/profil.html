@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profil Warga - SIRSA Berbasis AI | Modul User</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/sirsa-logo.svg">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="header-left">
+        <button id="mobile-menu-toggle" class="mobile-menu-btn" aria-label="Toggle menu" onclick="toggleSidebarDrawer()">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+        <a href="dashboard.html" class="logo-brand">
+          <img src="../assets/sirsa-logo.svg" alt="SIRSA Logo" class="logo-icon">
+          <div class="logo-info">
+            <span class="logo-title">SIRSA</span>
+            <span class="logo-subtitle">Sistem Informasi Pengaduan Masyarakat Berbasis AI</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="header-right">
+        <a href="dashboard.html" class="btn btn-outline btn-sm">← Kembali ke Dashboard</a>
+      </div>
+    </header>
+
+    <div class="main-shell">
+      <div id="mobile-drawer-overlay" class="mobile-drawer-overlay" onclick="toggleSidebarDrawer()"></div>
+
+      <aside class="app-sidebar" id="app-sidebar">
+        <div>
+          <div class="sidebar-user-card">
+            <div class="sidebar-user-avatar">👤</div>
+            <div class="sidebar-user-info">
+              <div class="greeting-title" id="sidebar-user-name">Halo, Pelapor</div>
+              <div class="greeting-subtitle">Warga Terverifikasi</div>
+            </div>
+          </div>
+
+          <div class="sidebar-section-title">Menu Pengguna</div>
+          <nav class="sidebar-nav">
+            <a href="dashboard.html" class="sidebar-nav-item">
+              <div class="nav-item-left">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+                <span>Dashboard Warga</span>
+              </div>
+            </a>
+            <a href="form.html" class="sidebar-nav-item">
+              <div class="nav-item-left">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                <span>Buat Pengaduan</span>
+              </div>
+            </a>
+            <a href="daftar.html" class="sidebar-nav-item">
+              <div class="nav-item-left">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                <span>Riwayat Aduan</span>
+              </div>
+            </a>
+            <a href="profil.html" class="sidebar-nav-item active">
+              <div class="nav-item-left">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <span>Profil Warga</span>
+              </div>
+            </a>
+          </nav>
+        </div>
+      </aside>
+
+      <main class="app-content">
+        <div style="max-width: 760px; margin: 0 auto;">
+          <div class="panel-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid var(--border-color);">
+              <div>
+                <h1 style="font-size:20px; font-weight:800; color:var(--text-main); margin:0;">Profil Akun Warga Terverifikasi</h1>
+                <p style="font-size:12.5px; color:var(--text-muted); margin:4px 0 0 0;">Informasi data kependudukan terintegrasi SIRSA</p>
+              </div>
+              <span class="tag-badge" style="background:#dcfce7; color:#15803d; font-weight:700;">✓ KTP Valid</span>
+            </div>
+
+            <form onsubmit="saveProfileChanges(event)">
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+                <div class="form-group">
+                  <label style="font-size:12.5px; font-weight:700;">Nama Lengkap</label>
+                  <input type="text" id="prof-name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label style="font-size:12.5px; font-weight:700;">Nomor NIK KTP</label>
+                  <input type="text" id="prof-nik" class="form-control" readonly style="background:#f1f5f9; cursor:not-allowed;">
+                </div>
+              </div>
+
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+                <div class="form-group">
+                  <label style="font-size:12.5px; font-weight:700;">Nomor Telepon / WhatsApp</label>
+                  <input type="tel" id="prof-tel" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label style="font-size:12.5px; font-weight:700;">Alamat Email</label>
+                  <input type="email" id="prof-email" class="form-control" required>
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-bottom:24px;">
+                <label style="font-size:12.5px; font-weight:700;">Wilayah Domisili</label>
+                <select id="prof-wilayah" class="form-control">
+                  <option value="Jakarta Pusat">Jakarta Pusat</option>
+                  <option value="Jakarta Selatan">Jakarta Selatan</option>
+                  <option value="Jakarta Barat">Jakarta Barat</option>
+                  <option value="Jakarta Timur">Jakarta Timur</option>
+                  <option value="Jakarta Utara">Jakarta Utara</option>
+                  <option value="Luar DKI Jakarta">Lainnya</option>
+                </select>
+              </div>
+
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <a href="../auth/login.html" onclick="logoutUser()" class="btn btn-outline" style="color:#ef4444; border-color:#fca5a5;">
+                  🚪 Keluar Sesi
+                </a>
+                <button type="submit" class="btn btn-primary" style="font-weight:700;">Simpan Perubahan</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../js/mock-data.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const u = getCurrentUser();
+      if (u) {
+        document.getElementById('sidebar-user-name').textContent = `Halo, ${u.name.split(' ')[0]}`;
+        document.getElementById('prof-name').value = u.name;
+        document.getElementById('prof-nik').value = u.nik || '3171012304920001';
+        document.getElementById('prof-tel').value = u.telepon || '081234567890';
+        document.getElementById('prof-email').value = u.email || 'budi.santoso@warga.id';
+        document.getElementById('prof-wilayah').value = u.wilayah || 'Jakarta Pusat';
+      }
+    });
+
+    function toggleSidebarDrawer() {
+      const sidebar = document.getElementById('app-sidebar');
+      const overlay = document.getElementById('mobile-drawer-overlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('active');
+    }
+
+    function saveProfileChanges(e) {
+      e.preventDefault();
+      const u = getCurrentUser();
+      u.name = document.getElementById('prof-name').value.trim();
+      u.telepon = document.getElementById('prof-tel').value.trim();
+      u.email = document.getElementById('prof-email').value.trim();
+      u.wilayah = document.getElementById('prof-wilayah').value;
+      setCurrentUser(u);
+      alert('Data profil berhasil diperbarui!');
+      window.location.href = 'dashboard.html';
+    }
+  </script>
+</body>
+</html>

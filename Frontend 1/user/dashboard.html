@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Warga - SIRSA Berbasis AI | Modul User</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/sirsa-logo.svg">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .user-hero-card {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 60%, #0284c7 100%);
+      border-radius: var(--radius-2xl);
+      padding: 32px 36px;
+      color: #ffffff;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 16px 36px -10px rgba(30, 58, 138, 0.28);
+    }
+    .user-hero-card::after {
+      content: '';
+      position: absolute;
+      right: -40px;
+      bottom: -40px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .user-hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 14px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      font-size: 12px;
+      font-weight: 700;
+      color: #bae6fd;
+      margin-bottom: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .user-actions-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .btn-hero-action {
+      background: #ffffff;
+      color: #1e3a8a;
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: var(--radius-md);
+      font-size: 13.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .btn-hero-action:hover {
+      background: #eff6ff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+    }
+    .btn-hero-outline {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: var(--radius-md);
+      font-size: 13.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      backdrop-filter: blur(6px);
+      transition: var(--transition);
+    }
+    .btn-hero-outline:hover {
+      background: rgba(255, 255, 255, 0.22);
+      transform: translateY(-2px);
+    }
+    .status-timeline {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin: 20px 0;
+    }
+    .status-timeline::before {
+      content: '';
+      position: absolute;
+      top: 14px;
+      left: 20px;
+      right: 20px;
+      height: 3px;
+      background: #e2e8f0;
+      z-index: 1;
+    }
+    .timeline-step {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      flex: 1;
+    }
+    .step-circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 3px solid #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #64748b;
+      transition: var(--transition);
+    }
+    .timeline-step.active .step-circle {
+      border-color: #2563eb;
+      background: #2563eb;
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(37, 99, 235, 0.4);
+    }
+    .timeline-step.done .step-circle {
+      border-color: #10b981;
+      background: #10b981;
+      color: #ffffff;
+    }
+    .step-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #64748b;
+    }
+    .timeline-step.active .step-label {
+      color: #2563eb;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- Top Header Navigation -->
+    <header class="app-header">
+      <div class="header-left">
+        <button id="mobile-menu-toggle" class="mobile-menu-btn" aria-label="Toggle menu" onclick="toggleSidebarDrawer()">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+        <a href="dashboard.html" class="logo-brand">
+          <img src="../assets/sirsa-logo.svg" alt="SIRSA Logo" class="logo-icon">
+          <div class="logo-info">
+            <span class="logo-title">SIRSA</span>
+            <span class="logo-subtitle">Portal Pengaduan Warga Berbasis AI</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="header-right">
+        <!-- Quick Nav -->
+        <a href="form.html" class="btn btn-primary btn-sm" style="font-weight: 700;">+ Buat Aduan Baru</a>
+        
+        <!-- User Badge -->
+        <div class="user-profile-badge" onclick="openProfileCard()" title="Profil Saya">
+          <div class="user-avatar-mini" id="header-avatar-circle">👤</div>
+          <span class="user-name" id="header-user-name">Budi Santoso • Warga</span>
+        </div>
+
+        <!-- Logout button -->
+        <a href="../auth/login.html" onclick="logoutCurrentSession()" class="btn btn-outline btn-sm" style="color: #ef4444; border-color: #fca5a5; font-weight: 700;" title="Keluar dari Akun">
+          🚪 Keluar
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Shell -->
+    <div class="main-shell">
+      <div id="mobile-drawer-overlay" class="mobile-drawer-overlay" onclick="toggleSidebarDrawer()"></div>
+
+      <!-- User Sidebar -->
+      <aside class="app-sidebar" id="app-sidebar">
+        <div>
+          <!-- Sidebar User Profile Card -->
+          <div class="sidebar-user-card" onclick="openProfileCard()">
+            <div class="sidebar-user-avatar">👤</div>
+            <div class="sidebar-user-info">
+              <div class="greeting-title" id="sidebar-user-name">Halo, Budi</div>
+              <div class="greeting-subtitle" id="sidebar-user-dept">Warga Terverifikasi</div>
+            </div>
+          </div>
+
+          <!-- Menu Section -->
+          <div class="sidebar-section-title">Menu Pengguna</div>
+          <nav class="sidebar-nav">
+            <a href="dashboard.html" class="sidebar-nav-item active">
+              <div class="nav-item-left">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+                <span>Dashboard Warga</span>
+              </div>
+            </a>
+
+            <a href="form.html" class="sidebar-nav-item">
+              <div class="nav-item-left">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                <span>Buat Pengaduan</span>
+              </div>
+              <span class="nav-pill-badge" style="background:#dcfce7; color:#15803d;">+ Baru</span>
+            </a>
+
+            <a href="daftar.html" class="sidebar-nav-item">
+              <div class="nav-item-left">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                <span>Riwayat Aduan Saya</span>
+              </div>
+              <span class="nav-pill-badge" id="sidebar-count-badge">3</span>
+            </a>
+
+            <a href="profil.html" class="sidebar-nav-item">
+              <div class="nav-item-left">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <span>Profil & Data KTP</span>
+              </div>
+            </a>
+          </nav>
+
+          <div class="sidebar-section-title">Navigasi Global</div>
+          <nav class="sidebar-nav">
+            <a href="../dashboard.html" class="sidebar-nav-item">
+              <div class="nav-item-left">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                <span>Dashboard Kota / Admin</span>
+              </div>
+            </a>
+            <a href="../auth/login.html" class="sidebar-nav-item">
+              <div class="nav-item-left">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                <span>Ganti Akun / Auth</span>
+              </div>
+            </a>
+          </nav>
+        </div>
+
+        <!-- Help Widget -->
+        <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius-lg); padding: 14px; margin-top: 20px;">
+          <div style="display:flex; align-items:center; gap:8px; font-weight:700; color:#1e3a8a; font-size:12.5px; margin-bottom:4px;">
+            <span>🤖 Asisten AI SIRSA</span>
+          </div>
+          <p style="font-size:11.5px; color:#475569; line-height:1.5; margin:0;">
+            Aduan Anda langsung diproses AI untuk diteruskan ke Dinas terkait dalam kurun waktu kurang dari 15 menit.
+          </p>
+        </div>
+      </aside>
+
+      <!-- Main Content Container -->
+      <main class="app-content">
+        
+        <!-- Welcome Hero Banner -->
+        <section class="user-hero-card">
+          <div class="user-hero-tag">
+            <span>🛡️</span> Portal Pengguna Terverifikasi
+          </div>
+          <h1 style="font-size: 26px; font-weight: 800; line-height: 1.25; margin-bottom: 8px;" id="hero-welcome-title">
+            Selamat Datang di SIRSA, Budi Santoso 👋
+          </h1>
+          <p style="font-size: 14px; color: #bae6fd; max-width: 680px; line-height: 1.6; margin: 0;">
+            Sampaikan keluhan fasilitas publik seperti jalan rusak, tumpukan sampah, drainase banjir, atau PJU padam. AI SIRSA siap mendeteksi dan mempercepat penanganan laporan Anda.
+          </p>
+          <div class="user-actions-row">
+            <a href="#section-quick-form" class="btn-hero-action" onclick="focusQuickForm()">
+              <span>+</span> Buat Aduan Cepat (AI)
+            </a>
+            <a href="daftar.html" class="btn-hero-outline">
+              <span>📋</span> Lihat Semua Aduan Saya
+            </a>
+            <button type="button" class="btn-hero-outline" onclick="openHelpInfo()">
+              <span>❓</span> Panduan Pelaporan
+            </button>
+          </div>
+        </section>
+
+        <!-- Stats Grid (4 Cards) -->
+        <section class="stats-grid" style="margin-bottom: 24px;">
+          <!-- Card 1 -->
+          <div class="stat-card">
+            <div class="stat-icon-wrapper" style="background:#eff6ff; color:#2563eb;">
+              📁
+            </div>
+            <div>
+              <span class="stat-label">Total Aduan Saya</span>
+              <div class="stat-value" id="stat-user-total">0</div>
+              <span class="stat-subtext" style="color: #2563eb;">Tercatat dalam sistem</span>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="stat-card">
+            <div class="stat-icon-wrapper" style="background:#fef3c7; color:#d97706;">
+              ⚙️
+            </div>
+            <div>
+              <span class="stat-label">Sedang Diproses</span>
+              <div class="stat-value" id="stat-user-proses">0</div>
+              <span class="stat-subtext" style="color: #d97706;">Dinas terkait turun ke lapangan</span>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="stat-card">
+            <div class="stat-icon-wrapper" style="background:#dcfce7; color:#15803d;">
+              ✅
+            </div>
+            <div>
+              <span class="stat-label">Aduan Selesai</span>
+              <div class="stat-value" id="stat-user-selesai">0</div>
+              <span class="stat-subtext" style="color: #15803d;">Fasilitas telah diperbaiki</span>
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="stat-card">
+            <div class="stat-icon-wrapper" style="background:#fee2e2; color:#dc2626;">
+              ⏳
+            </div>
+            <div>
+              <span class="stat-label">Menunggu Respon</span>
+              <div class="stat-value" id="stat-user-menunggu">0</div>
+              <span class="stat-subtext" style="color: #dc2626;">Verifikasi antrean dinas</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2-Column Content Layout -->
+        <div style="display: grid; grid-template-columns: 1.6fr 1fr; gap: 24px;">
+          
+          <!-- Left Column: User Complaints List -->
+          <div>
+            <div class="panel-card" style="margin-bottom: 24px;">
+              <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
+                <div>
+                  <h2 style="font-size: 16px; font-weight: 800; margin: 0; color: var(--text-main);">Daftar Pengaduan Terkini Saya</h2>
+                  <p style="font-size: 12.5px; color: var(--text-muted); margin: 2px 0 0 0;">Laporan yang dikirimkan melalui akun Anda</p>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                  <button class="btn btn-outline btn-sm" onclick="filterUserList('all')" id="btn-flt-all" style="font-weight:700;">Semua</button>
+                  <button class="btn btn-outline btn-sm" onclick="filterUserList('Diproses')" id="btn-flt-proses">Diproses</button>
+                  <button class="btn btn-outline btn-sm" onclick="filterUserList('Selesai')" id="btn-flt-selesai">Selesai</button>
+                </div>
+              </div>
+
+              <!-- Table list -->
+              <div style="overflow-x: auto; margin-top: 14px;">
+                <table class="data-table" style="width: 100%;">
+                  <thead>
+                    <tr>
+                      <th>Tiket</th>
+                      <th>Keluhan & Fasilitas</th>
+                      <th>Klasifikasi AI</th>
+                      <th>Status</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="user-reports-tbody">
+                    <!-- Populated by JavaScript -->
+                  </tbody>
+                </table>
+              </div>
+
+              <div id="user-empty-state" style="display: none; padding: 40px 20px; text-align: center;">
+                <div style="font-size: 40px; margin-bottom: 8px;">📭</div>
+                <h3 style="font-size: 15px; font-weight: 700; color: #475569;">Belum Ada Laporan Pengaduan</h3>
+                <p style="font-size: 12.5px; color: #94a3b8; max-width: 320px; margin: 4px auto 14px;">
+                  Kirimkan keluhan fasilitas umum di wilayah Anda menggunakan formulir di samping.
+                </p>
+                <a href="#section-quick-form" class="btn btn-primary btn-sm" onclick="focusQuickForm()">+ Buat Aduan Pertama</a>
+              </div>
+            </div>
+
+            <!-- Recent handling highlights -->
+            <div class="panel-card">
+              <h3 style="font-size: 15px; font-weight: 800; margin-bottom: 12px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                <span>📢</span> Info Pelayanan Publik DKI Jakarta
+              </h3>
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                <div style="padding: 12px 14px; background: #f8fafc; border-radius: var(--radius-md); border-left: 4px solid #2563eb;">
+                  <strong style="font-size: 13px; color: #1e3a8a; display: block;">Percepatan Penanganan Musim Hujan</strong>
+                  <span style="font-size: 12px; color: #475569;">Dinas SDA menyiagakan 450 unit pompa air mobile di 5 wilayah kota administrasi untuk mengantisipasi genangan.</span>
+                </div>
+                <div style="padding: 12px 14px; background: #f8fafc; border-radius: var(--radius-md); border-left: 4px solid #10b981;">
+                  <strong style="font-size: 13px; color: #065f46; display: block;">Target 1x24 Jam Penambalan Jalan</strong>
+                  <span style="font-size: 12px; color: #475569;">Laporan jalan berlubang dengan status AI 'Prioritas Tinggi' ditargetkan langsung direspon dalam waktu 24 jam.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Quick AI Form & Assistant -->
+          <div>
+            
+            <!-- Quick Report Form Card -->
+            <div class="panel-card" id="section-quick-form" style="margin-bottom: 24px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                <h3 style="font-size: 15px; font-weight: 800; color: var(--text-main); margin: 0; display: flex; align-items: center; gap: 8px;">
+                  <span>⚡</span> Form Aduan Cepat AI
+                </h3>
+                <span style="background: #eff6ff; color: #2563eb; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 9999px;">
+                  Realtime NLP
+                </span>
+              </div>
+
+              <form id="user-quick-form" onsubmit="handleQuickSubmit(event)">
+                <div class="form-group" style="margin-bottom: 12px;">
+                  <label for="quick-judul" style="font-size: 12px; font-weight: 700; color: #334155;">Judul Keluhan Singkat</label>
+                  <input type="text" id="quick-judul" class="form-control" placeholder="Contoh: Aspal Jalan Rusak Parah di RT 03" required style="border-radius: 10px;">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 12px;">
+                  <label for="quick-deskripsi" style="font-size: 12px; font-weight: 700; color: #334155;">Deskripsi Kerusakan Fasilitas</label>
+                  <textarea id="quick-deskripsi" class="form-control" rows="3" placeholder="Ketik keterangan masalah (misal: jalan berlubang dalam membahayakan motor...)" required oninput="runUserAiPrediction(this.value)" style="border-radius: 10px;"></textarea>
+                </div>
+
+                <!-- AI Prediction Box -->
+                <div id="quick-ai-box" style="background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px; padding: 12px; margin-bottom: 14px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <span style="font-size: 11px; font-weight: 700; color: #475569;">PREDIKSI AI REAL-TIME:</span>
+                    <span id="quick-ai-confidence" style="font-size: 11px; font-weight: 700; color: #2563eb;">Menunggu input...</span>
+                  </div>
+                  <div style="display: flex; gap: 8px; align-items: center;">
+                    <span id="quick-ai-category" class="tag-badge" style="background:#e2e8f0; color:#475569; font-size: 11px;">Kategori: Otomatis</span>
+                    <span id="quick-ai-priority" class="tag-badge" style="background:#e2e8f0; color:#475569; font-size: 11px;">Prioritas: Otomatis</span>
+                  </div>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 16px;">
+                  <label for="quick-lokasi" style="font-size: 12px; font-weight: 700; color: #334155;">Lokasi / Alamat Kejadian</label>
+                  <div style="position: relative;">
+                    <input type="text" id="quick-lokasi" class="form-control" placeholder="Jl. Sudirman No. 12, Kelurahan Menteng" required style="border-radius: 10px; padding-right: 36px;">
+                    <button type="button" onclick="detectUserGps()" title="Deteksi Lokasi Saya" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 15px;">📍</button>
+                  </div>
+                </div>
+
+                <button type="submit" id="btn-submit-quick" class="btn btn-primary btn-block" style="padding: 11px; font-weight: 700; border-radius: 10px;">
+                  🚀 Kirim Laporan Pengaduan
+                </button>
+              </form>
+
+              <div style="text-align: center; margin-top: 10px;">
+                <a href="form.html" style="font-size: 11.5px; color: #2563eb; font-weight: 600;">Buka formulir lengkap dengan upload foto →</a>
+              </div>
+            </div>
+
+            <!-- Profile Overview Card -->
+            <div class="panel-card">
+              <h3 style="font-size: 15px; font-weight: 800; color: var(--text-main); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                <span>👤</span> Data Identitas Warga
+              </h3>
+              <div style="display: flex; flex-direction: column; gap: 10px; font-size: 12.5px;">
+                <div style="display: flex; justify-content: space-between; padding-bottom: 6px; border-bottom: 1px solid #f1f5f9;">
+                  <span style="color: #64748b;">Nama Lengkap:</span>
+                  <strong id="card-user-name">Budi Santoso</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding-bottom: 6px; border-bottom: 1px solid #f1f5f9;">
+                  <span style="color: #64748b;">NIK KTP:</span>
+                  <strong id="card-user-nik">3171012304920001</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding-bottom: 6px; border-bottom: 1px solid #f1f5f9;">
+                  <span style="color: #64748b;">Wilayah Domisili:</span>
+                  <strong id="card-user-wilayah">Jakarta Pusat</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding-bottom: 6px; border-bottom: 1px solid #f1f5f9;">
+                  <span style="color: #64748b;">Status Akun:</span>
+                  <span class="tag-badge" style="background:#dcfce7; color:#15803d; font-weight:700;">✓ Terverifikasi</span>
+                </div>
+              </div>
+              <div style="margin-top: 14px;">
+                <a href="profil.html" class="btn btn-outline btn-block btn-sm" style="font-weight: 600;">Perbarui Profil & Sandi</a>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Complaint Detail Modal -->
+  <div id="user-detail-modal" class="modal-backdrop" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(15,23,42,0.6); z-index:9999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:#ffffff; border-radius:20px; max-width:620px; width:100%; max-height:90vh; overflow-y:auto; box-shadow:0 25px 50px -12px rgba(0,0,0,0.25);">
+      <div style="padding:20px 24px; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border-radius:20px 20px 0 0;">
+        <div>
+          <span id="modal-ticket-badge" class="tag-badge" style="background:#dbeafe; color:#1e40af; font-weight:800; font-size:12px;">#SR-12481</span>
+          <h3 id="modal-report-title" style="margin:4px 0 0 0; font-size:16px; font-weight:800; color:#0f172a;">Judul Laporan</h3>
+        </div>
+        <button onclick="closeDetailModal()" style="background:none; border:none; font-size:20px; color:#64748b; cursor:pointer;">&times;</button>
+      </div>
+      
+      <div style="padding:24px;">
+        <!-- Timeline Progress -->
+        <div style="margin-bottom: 20px;">
+          <h4 style="font-size:12px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">Progres Penanganan Dinas:</h4>
+          <div class="status-timeline">
+            <div class="timeline-step done" id="step-1">
+              <div class="step-circle">✓</div>
+              <div class="step-label">Diterima</div>
+            </div>
+            <div class="timeline-step active" id="step-2">
+              <div class="step-circle">2</div>
+              <div class="step-label">Diproses</div>
+            </div>
+            <div class="timeline-step" id="step-3">
+              <div class="step-circle">3</div>
+              <div class="step-label">Selesai</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; font-size:12.5px;">
+          <div style="background:#f8fafc; padding:10px 14px; border-radius:10px;">
+            <span style="color:#64748b; display:block; font-size:11px;">Kategori AI:</span>
+            <strong id="modal-kategori">-</strong>
+          </div>
+          <div style="background:#f8fafc; padding:10px 14px; border-radius:10px;">
+            <span style="color:#64748b; display:block; font-size:11px;">Tingkat Urgensi AI:</span>
+            <strong id="modal-prioritas">-</strong>
+          </div>
+          <div style="background:#f8fafc; padding:10px 14px; border-radius:10px; grid-column:span 2;">
+            <span style="color:#64748b; display:block; font-size:11px;">Lokasi Kejadian:</span>
+            <strong id="modal-lokasi">-</strong>
+          </div>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <span style="color:#64748b; display:block; font-size:12px; font-weight:700; margin-bottom:4px;">Keterangan / Deskripsi:</span>
+          <p id="modal-deskripsi" style="font-size:13px; color:#334155; line-height:1.6; background:#f8fafc; padding:12px; border-radius:10px; margin:0;"></p>
+        </div>
+
+        <div id="modal-catatan-wrapper" style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:12px; padding:14px; margin-bottom:16px;">
+          <strong style="color:#1e3a8a; font-size:12.5px; display:block; margin-bottom:4px;">💬 Catatan Tindak Lanjut Petugas:</strong>
+          <span id="modal-catatan" style="font-size:12px; color:#334155; line-height:1.5;">Belum ada catatan penanganan.</span>
+        </div>
+
+        <div style="text-align:right;">
+          <button class="btn btn-outline btn-sm" onclick="closeDetailModal()">Tutup Jendela</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../js/mock-data.js"></script>
+  <script src="../js/ai-classifier.js"></script>
+  <script>
+    let activeFilter = 'all';
+    let currentUser = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initUserDashboard();
+    });
+
+    function initUserDashboard() {
+      currentUser = getCurrentUser();
+      
+      // Update UI with User details
+      if (currentUser) {
+        document.getElementById('header-user-name').textContent = `${currentUser.name} • ${currentUser.role || 'Warga'}`;
+        document.getElementById('sidebar-user-name').textContent = `Halo, ${currentUser.name.split(' ')[0]}`;
+        document.getElementById('sidebar-user-dept').textContent = currentUser.department || 'Warga Terverifikasi';
+        document.getElementById('hero-welcome-title').textContent = `Selamat Datang di SIRSA, ${currentUser.name} 👋`;
+        document.getElementById('card-user-name').textContent = currentUser.name;
+        document.getElementById('card-user-nik').textContent = currentUser.nik || '3171012304920001';
+        document.getElementById('card-user-wilayah').textContent = currentUser.wilayah || 'DKI Jakarta';
+      }
+
+      renderUserReports();
+    }
+
+    function toggleSidebarDrawer() {
+      const sidebar = document.getElementById('app-sidebar');
+      const overlay = document.getElementById('mobile-drawer-overlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('active');
+    }
+
+    function renderUserReports() {
+      const allReports = getStoredReports();
+      // Filter reports for current user if name matches, or show relevant mock reports
+      let userReports = allReports.filter(r => 
+        (currentUser && r.pelapor && r.pelapor.toLowerCase() === currentUser.name.toLowerCase()) ||
+        (currentUser && r.nik && r.nik === currentUser.nik)
+      );
+
+      // If newly logged in and no specific report, include top demo reports so dashboard is not empty
+      if (userReports.length === 0) {
+        userReports = allReports.slice(0, 3);
+      }
+
+      // Stats calculation
+      const total = userReports.length;
+      const proses = userReports.filter(r => r.status === 'Diproses').length;
+      const selesai = userReports.filter(r => r.status === 'Selesai').length;
+      const menunggu = userReports.filter(r => r.status === 'Menunggu').length;
+
+      document.getElementById('stat-user-total').textContent = total;
+      document.getElementById('stat-user-proses').textContent = proses;
+      document.getElementById('stat-user-selesai').textContent = selesai;
+      document.getElementById('stat-user-menunggu').textContent = menunggu;
+      document.getElementById('sidebar-count-badge').textContent = total;
+
+      // Filter
+      let filtered = userReports;
+      if (activeFilter !== 'all') {
+        filtered = userReports.filter(r => r.status === activeFilter);
+      }
+
+      const tbody = document.getElementById('user-reports-tbody');
+      const emptyState = document.getElementById('user-empty-state');
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '';
+        emptyState.style.display = 'block';
+        return;
+      }
+
+      emptyState.style.display = 'none';
+      tbody.innerHTML = filtered.map(r => `
+        <tr>
+          <td><strong style="color:#2563eb; font-size:12.5px;">${r.id}</strong></td>
+          <td>
+            <div style="font-weight:700; color:#0f172a; font-size:13px;">${escapeHtml(r.judul)}</div>
+            <div style="font-size:11.5px; color:#64748b; margin-top:2px;">📍 ${escapeHtml(r.lokasi)} • 📅 ${r.tanggal}</div>
+          </td>
+          <td>
+            <span class="tag-badge" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">${r.kategori_ai}</span>
+            <span class="tag-badge ${r.prioritas_ai === 'Tinggi' ? 'badge-high' : (r.prioritas_ai === 'Sedang' ? 'badge-medium' : 'badge-low')}">${r.prioritas_ai}</span>
+          </td>
+          <td>
+            <span class="status-pill status-${r.status ? r.status.toLowerCase() : 'menunggu'}">${r.status}</span>
+          </td>
+          <td>
+            <button class="btn btn-outline btn-sm" onclick="openDetailModal('${r.id}')" style="padding:4px 10px; font-size:11.5px;">Detail</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function filterUserList(status) {
+      activeFilter = status;
+      document.querySelectorAll('#btn-flt-all, #btn-flt-proses, #btn-flt-selesai').forEach(b => b.classList.remove('active'));
+      if (status === 'all') document.getElementById('btn-flt-all').classList.add('active');
+      if (status === 'Diproses') document.getElementById('btn-flt-proses').classList.add('active');
+      if (status === 'Selesai') document.getElementById('btn-flt-selesai').classList.add('active');
+      renderUserReports();
+    }
+
+    let detectedCat = 'Infrastruktur';
+    let detectedPrio = 'Sedang';
+
+    function runUserAiPrediction(text) {
+      if (typeof window.classifyComplaintText === 'function') {
+        const pred = window.classifyComplaintText(text);
+        detectedCat = pred.kategori;
+        detectedPrio = pred.prioritas;
+
+        document.getElementById('quick-ai-confidence').textContent = `Skor AI: ${pred.skor || 92}% Akurat`;
+        const catBadge = document.getElementById('quick-ai-category');
+        const prioBadge = document.getElementById('quick-ai-priority');
+
+        catBadge.textContent = `Kategori: ${pred.kategori}`;
+        catBadge.style.background = '#dbeafe';
+        catBadge.style.color = '#1e40af';
+
+        prioBadge.textContent = `Urgensi: ${pred.prioritas}`;
+        if (pred.prioritas === 'Tinggi') {
+          prioBadge.style.background = '#fee2e2';
+          prioBadge.style.color = '#dc2626';
+        } else if (pred.prioritas === 'Sedang') {
+          prioBadge.style.background = '#fef3c7';
+          prioBadge.style.color = '#d97706';
+        } else {
+          prioBadge.style.background = '#dcfce7';
+          prioBadge.style.color = '#15803d';
+        }
+      }
+    }
+
+    function detectUserGps() {
+      const locInput = document.getElementById('quick-lokasi');
+      locInput.value = 'Mendeteksi koordinat satelit...';
+      setTimeout(() => {
+        locInput.value = 'Jl. Medan Merdeka Barat No. 8, Gambir, Jakarta Pusat (GPS Terverifikasi)';
+      }, 500);
+    }
+
+    function focusQuickForm() {
+      document.getElementById('quick-judul').focus();
+    }
+
+    function handleQuickSubmit(e) {
+      e.preventDefault();
+      const judul = document.getElementById('quick-judul').value.trim();
+      const deskripsi = document.getElementById('quick-deskripsi').value.trim();
+      const lokasi = document.getElementById('quick-lokasi').value.trim();
+      const btn = document.getElementById('btn-submit-quick');
+
+      btn.disabled = true;
+      btn.innerHTML = 'Memproses data aduan...';
+
+      setTimeout(() => {
+        const newReport = {
+          judul: judul,
+          deskripsi: deskripsi,
+          lokasi: lokasi,
+          pelapor: currentUser ? currentUser.name : 'Budi Santoso',
+          nik: currentUser ? currentUser.nik : '3171012304920001',
+          telepon: currentUser ? currentUser.telepon : '081234567890',
+          email: currentUser ? currentUser.email : 'budi.santoso@warga.id',
+          kategori_ai: detectedCat,
+          prioritas_ai: detectedPrio,
+          status: 'Menunggu',
+          aiScore: 94,
+          catatanAdmin: 'Laporan baru diterima oleh sistem SIRSA. Tim kelurahan sedang memverifikasi lokasi.'
+        };
+
+        const saved = saveReport(newReport);
+        btn.disabled = false;
+        btn.innerHTML = '🚀 Kirim Laporan Pengaduan';
+        document.getElementById('user-quick-form').reset();
+
+        alert(`Laporan Anda Berhasil Diterbitkan!\nNomor Tiket Resmi: ${saved.id}\nStatus: Menunggu Respon Dinas`);
+        renderUserReports();
+      }, 400);
+    }
+
+    function openDetailModal(reportId) {
+      const allReports = getStoredReports();
+      const rep = allReports.find(r => r.id === reportId);
+      if (!rep) return;
+
+      document.getElementById('modal-ticket-badge').textContent = rep.id;
+      document.getElementById('modal-report-title').textContent = rep.judul;
+      document.getElementById('modal-kategori').textContent = rep.kategori_ai;
+      document.getElementById('modal-prioritas').textContent = `${rep.prioritas_ai} (Skor AI: ${rep.aiScore || 90}%)`;
+      document.getElementById('modal-lokasi').textContent = rep.lokasi;
+      document.getElementById('modal-deskripsi').textContent = rep.deskripsi;
+      document.getElementById('modal-catatan').textContent = rep.catatanAdmin || 'Belum ada catatan tindak lanjut petugas.';
+
+      // Update progress timeline steps
+      const s1 = document.getElementById('step-1');
+      const s2 = document.getElementById('step-2');
+      const s3 = document.getElementById('step-3');
+
+      s1.className = 'timeline-step done';
+      s2.className = 'timeline-step';
+      s3.className = 'timeline-step';
+
+      if (rep.status === 'Diproses') {
+        s2.className = 'timeline-step active';
+      } else if (rep.status === 'Selesai') {
+        s2.className = 'timeline-step done';
+        s3.className = 'timeline-step done';
+      } else {
+        s1.className = 'timeline-step active';
+      }
+
+      const modal = document.getElementById('user-detail-modal');
+      modal.style.display = 'flex';
+    }
+
+    function closeDetailModal() {
+      document.getElementById('user-detail-modal').style.display = 'none';
+    }
+
+    function openHelpInfo() {
+      alert('Panduan Pelaporan SIRSA:\n1. Tulis judul dan deskripsi masalah secara jelas.\n2. AI kami akan memprediksi kategori & tingkat urgensi secara otomatis.\n3. Laporan dengan prioritas tinggi langsung diteruskan ke dinas teknis.\n4. Anda dapat melacak progres pengerjaan di tabel dashboard ini kapan saja.');
+    }
+
+    function openProfileCard() {
+      window.location.href = 'profil.html';
+    }
+
+    function logoutCurrentSession() {
+      logoutUser();
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulir Pengaduan Warga - SIRSA Berbasis AI | Modul User</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/sirsa-logo.svg">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="header-left">
+        <button id="mobile-menu-toggle" class="mobile-menu-btn" aria-label="Toggle menu" onclick="toggleSidebarDrawer()">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+        <a href="dashboard.html" class="logo-brand">
+          <img src="../assets/sirsa-logo.svg" alt="SIRSA Logo" class="logo-icon">
+          <div class="logo-info">
+            <span class="logo-title">SIRSA</span>
+            <span class="logo-subtitle">Sistem Informasi Pengaduan Masyarakat Berbasis AI</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="header-right">
+        <a href="dashboard.html" class="btn btn-outline btn-sm">← Kembali ke Dashboard</a>
+        <div class="user-profile-badge" onclick="window.location.href='profil.html'">
+          <div class="user-avatar-mini">👤</div>
+          <span class="user-name" id="header-user-name">Warga Pelapor</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="main-shell">
+      <div id="mobile-drawer-overlay" class="mobile-drawer-overlay" onclick="toggleSidebarDrawer()"></div>
+
+      <aside class="app-sidebar" id="app-sidebar">
+        <div>
+          <div class="sidebar-user-card" onclick="window.location.href='profil.html'">
+            <div class="sidebar-user-avatar">👤</div>
+            <div class="sidebar-user-info">
+              <div class="greeting-title" id="sidebar-user-name">Halo, Pelapor</div>
+              <div class="greeting-subtitle" id="sidebar-user-dept">Warga Terverifikasi</div>
+            </div>
+          </div>
+
+          <div class="sidebar-section-title">Menu Pengguna</div>
+          <nav class="sidebar-nav">
+            <a href="dashboard.html" class="sidebar-nav-item">
+              <div class="nav-item-left">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+                <span>Dashboard Warga</span>
+              </div>
+            </a>
+            <a href="form.html" class="sidebar-nav-item active">
+              <div class="nav-item-left">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                <span>Buat Pengaduan</span>
+              </div>
+            </a>
+            <a href="daftar.html" class="sidebar-nav-item">
+              <div class="nav-item-left">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                <span>Riwayat Aduan</span>
+              </div>
+            </a>
+            <a href="profil.html" class="sidebar-nav-item">
+              <div class="nav-item-left">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <span>Profil Warga</span>
+              </div>
+            </a>
+          </nav>
+        </div>
+      </aside>
+
+      <main class="app-content">
+        <div style="max-width: 860px; margin: 0 auto;">
+          <div class="panel-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid var(--border-color);">
+              <div>
+                <h1 style="font-size:20px; font-weight:800; color:var(--text-main); margin:0;">Formulir Pengaduan Masyarakat</h1>
+                <p style="font-size:13px; color:var(--text-muted); margin:4px 0 0 0;">Laporan Anda akan dianalisis secara instan oleh model AI NLP SIRSA</p>
+              </div>
+              <span class="tag-badge" style="background:#eff6ff; color:#2563eb; font-weight:700;">Modul User</span>
+            </div>
+
+            <form id="main-user-form" onsubmit="handleMainFormSubmit(event)">
+              <div class="form-group" style="margin-bottom:16px;">
+                <label for="form-judul" style="font-size:13px; font-weight:700;">Judul Keluhan Fasilitas <span style="color:#ef4444;">*</span></label>
+                <input type="text" id="form-judul" class="form-control" placeholder="Contoh: Aspal Amblas dan Berlubang di Depan Puskesmas" required>
+              </div>
+
+              <div class="form-group" style="margin-bottom:16px;">
+                <label for="form-deskripsi" style="font-size:13px; font-weight:700;">Deskripsi Detail Kerusakan <span style="color:#ef4444;">*</span></label>
+                <textarea id="form-deskripsi" class="form-control" rows="4" placeholder="Ceritakan detail kerusakan (lokasi patokan, sudah berapa lama, dampak terhadap warga sekitar...)" required oninput="triggerAi(this.value)"></textarea>
+              </div>
+
+              <!-- AI Prediction Preview -->
+              <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:14px; padding:16px; margin-bottom:20px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                  <strong style="font-size:12px; color:#1e3a8a; display:flex; align-items:center; gap:6px;">
+                    <span>🤖</span> ANALISIS PREDIKSI AI SIRSA:
+                  </strong>
+                  <span id="ai-accuracy-badge" style="font-size:11.5px; font-weight:700; color:#2563eb;">Menunggu analisis teks...</span>
+                </div>
+                <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                  <div style="background:white; border:1px solid #e2e8f0; padding:8px 14px; border-radius:10px;">
+                    <span style="font-size:11px; color:#64748b; display:block;">Kategori Terdeteksi:</span>
+                    <strong id="ai-cat-text" style="color:#0f172a; font-size:13px;">Infrastruktur (Jalan / Jembatan)</strong>
+                  </div>
+                  <div style="background:white; border:1px solid #e2e8f0; padding:8px 14px; border-radius:10px;">
+                    <span style="font-size:11px; color:#64748b; display:block;">Tingkat Urgensi:</span>
+                    <strong id="ai-prio-text" style="color:#dc2626; font-size:13px;">Tinggi (Prioritas Utama)</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+                <div class="form-group">
+                  <label for="form-nama" style="font-size:13px; font-weight:700;">Nama Pelapor <span style="color:#ef4444;">*</span></label>
+                  <input type="text" id="form-nama" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label for="form-nik" style="font-size:13px; font-weight:700;">Nomor NIK KTP (16 Digit) <span style="color:#ef4444;">*</span></label>
+                  <input type="text" id="form-nik" maxlength="16" class="form-control" required>
+                </div>
+              </div>
+
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+                <div class="form-group">
+                  <label for="form-telepon" style="font-size:13px; font-weight:700;">Nomor Telepon / WhatsApp <span style="color:#ef4444;">*</span></label>
+                  <input type="tel" id="form-telepon" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label for="form-email" style="font-size:13px; font-weight:700;">Email Pelapor</label>
+                  <input type="email" id="form-email" class="form-control">
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-bottom:24px;">
+                <label for="form-lokasi" style="font-size:13px; font-weight:700;">Lokasi Kejadian Fasilitas <span style="color:#ef4444;">*</span></label>
+                <div style="position:relative;">
+                  <input type="text" id="form-lokasi" class="form-control" placeholder="Nama Jalan, RT/RW, Patokan Tempat" required style="padding-right:40px;">
+                  <button type="button" onclick="detectGPS()" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; font-size:16px;" title="Deteksi GPS">📍</button>
+                </div>
+              </div>
+
+              <div style="display:flex; justify-content:flex-end; gap:12px;">
+                <a href="dashboard.html" class="btn btn-outline">Batal</a>
+                <button type="submit" id="btn-submit" class="btn btn-primary" style="padding:10px 24px; font-weight:700;">
+                  🚀 Terbitkan Pengaduan Resmi
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../js/mock-data.js"></script>
+  <script src="../js/ai-classifier.js"></script>
+  <script>
+    let currentCat = 'Infrastruktur';
+    let currentPrio = 'Sedang';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = getCurrentUser();
+      if (user) {
+        document.getElementById('header-user-name').textContent = user.name;
+        document.getElementById('sidebar-user-name').textContent = `Halo, ${user.name.split(' ')[0]}`;
+        document.getElementById('form-nama').value = user.name;
+        document.getElementById('form-nik').value = user.nik || '';
+        document.getElementById('form-telepon').value = user.telepon || '';
+        document.getElementById('form-email').value = user.email || '';
+      }
+    });
+
+    function toggleSidebarDrawer() {
+      const sidebar = document.getElementById('app-sidebar');
+      const overlay = document.getElementById('mobile-drawer-overlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('active');
+    }
+
+    function triggerAi(val) {
+      if (typeof window.classifyComplaintText === 'function') {
+        const pred = window.classifyComplaintText(val);
+        currentCat = pred.kategori;
+        currentPrio = pred.prioritas;
+        document.getElementById('ai-accuracy-badge').textContent = `Skor Akurasi AI: ${pred.skor || 92}%`;
+        document.getElementById('ai-cat-text').textContent = pred.kategori;
+        document.getElementById('ai-prio-text').textContent = pred.prioritas;
+      }
+    }
+
+    function detectGPS() {
+      const inp = document.getElementById('form-lokasi');
+      inp.value = 'Mendeteksi satelit GPS...';
+      setTimeout(() => {
+        inp.value = 'Jl. Medan Merdeka Timur No. 14, Gambir, Jakarta Pusat';
+      }, 450);
+    }
+
+    function handleMainFormSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btn-submit');
+      btn.disabled = true;
+      btn.innerHTML = 'Menerbitkan laporan...';
+
+      setTimeout(() => {
+        const report = {
+          judul: document.getElementById('form-judul').value.trim(),
+          deskripsi: document.getElementById('form-deskripsi').value.trim(),
+          lokasi: document.getElementById('form-lokasi').value.trim(),
+          pelapor: document.getElementById('form-nama').value.trim(),
+          nik: document.getElementById('form-nik').value.trim(),
+          telepon: document.getElementById('form-telepon').value.trim(),
+          email: document.getElementById('form-email').value.trim(),
+          kategori_ai: currentCat,
+          prioritas_ai: currentPrio,
+          status: 'Menunggu',
+          aiScore: 94,
+          catatanAdmin: 'Laporan baru warga telah terdaftar dan siap diproses oleh petugas verifikasi.'
+        };
+
+        const saved = saveReport(report);
+        alert(`Pengaduan Berhasil Dibuat!\nNomor Tiket Aduan: ${saved.id}\nLaporan Anda dapat langsung dipantau di Dashboard.`);
+        window.location.href = 'dashboard.html';
+      }, 500);
+    }
+  </script>
+</body>
+</html>

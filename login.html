@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login & Daftar Akun - SIRSA Berbasis AI</title>
+  <link rel="icon" type="image/svg+xml" href="assets/sirsa-logo.svg">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .auth-page-wrapper {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 10% 20%, #eff6ff 0%, #e0f2fe 45%, #f1f5f9 90%);
+      padding: 30px 20px;
+    }
+
+    .auth-master-card {
+      width: 100%;
+      max-width: 1080px;
+      background: #ffffff;
+      border-radius: 28px;
+      box-shadow: 0 25px 60px -15px rgba(30, 58, 138, 0.18), 0 0 0 1px rgba(226, 232, 240, 0.8);
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      overflow: hidden;
+      min-height: 640px;
+    }
+
+    .auth-banner {
+      background: linear-gradient(150deg, #0f172a 0%, #1e3a8a 50%, #0369a1 100%);
+      color: #ffffff;
+      padding: 48px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-banner::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.3) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .auth-banner::after {
+      content: '';
+      position: absolute;
+      bottom: -60px;
+      left: -60px;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(37, 99, 235, 0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .auth-badge-pill {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 9999px;
+      padding: 6px 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      width: fit-content;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .auth-features-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .auth-feature-chip {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      backdrop-filter: blur(6px);
+      transition: transform 0.2s ease;
+    }
+    .auth-feature-chip:hover {
+      transform: translateX(4px);
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .auth-feature-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: rgba(56, 189, 248, 0.25);
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    .auth-form-container {
+      padding: 44px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow-y: auto;
+      max-height: 85vh;
+    }
+
+    /* Main Tabs: Masuk vs Daftar */
+    .auth-main-switch-tabs {
+      display: flex;
+      background: #f1f5f9;
+      padding: 5px;
+      border-radius: 16px;
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .auth-switch-btn {
+      flex: 1;
+      padding: 10px 14px;
+      font-size: 13.5px;
+      font-weight: 700;
+      border: none;
+      background: transparent;
+      color: #64748b;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .auth-switch-btn.active {
+      background: #ffffff;
+      color: #1d4ed8;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+    }
+
+    .sub-role-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .sub-role-chip {
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .sub-role-chip.active {
+      background: #2563eb;
+      color: white;
+      border-color: #2563eb;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+    }
+
+    .password-wrapper {
+      position: relative;
+    }
+
+    .toggle-password-btn {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 4px;
+    }
+
+    .password-strength-meter {
+      height: 5px;
+      border-radius: 9999px;
+      background: #e2e8f0;
+      margin-top: 6px;
+      overflow: hidden;
+      display: flex;
+    }
+
+    .strength-fill {
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s ease, background-color 0.3s ease;
+    }
+
+    .demo-credentials-banner {
+      background: #eff6ff;
+      border: 1px dashed #93c5fd;
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .demo-quick-btn {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .demo-quick-btn:hover {
+      background: #1d4ed8;
+    }
+
+    @media (max-width: 960px) {
+      .auth-master-card {
+        grid-template-columns: 1fr;
+        max-width: 520px;
+      }
+      .auth-banner {
+        display: none;
+      }
+      .auth-form-container {
+        padding: 32px 24px;
+      }
+    }
+  </style>
+</head>
+<body class="auth-page-wrapper" style="flex-direction:column; gap:16px;">
+
+  <div style="width:100%; max-width:1080px; display:flex; justify-content:space-between; align-items:center;">
+    <a href="index.html#dashboard" style="display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:13px; color:#1e40af; background:#ffffff; padding:10px 20px; border-radius:9999px; box-shadow:0 4px 14px rgba(30, 58, 138, 0.08); text-decoration:none; border:1px solid #e2e8f0; transition:all 0.2s ease;">
+      ← Kembali ke Dashboard SIRSA
+    </a>
+    <div style="display:flex; align-items:center; gap:8px; font-size:12px; font-weight:700; color:#475569; background:rgba(255,255,255,0.7); backdrop-filter:blur(8px); padding:8px 16px; border-radius:9999px; border:1px solid #e2e8f0;">
+      <span style="width:8px; height:8px; border-radius:50%; background:#22c55e; display:inline-block;"></span>
+      <span>Portal Otentikasi AI v2.1</span>
+    </div>
+  </div>
+
+  <div class="auth-master-card">
+    <!-- Left Hero Banner -->
+    <div class="auth-banner">
+      <div>
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:28px;">
+          <img src="assets/sirsa-logo.svg" alt="SIRSA Logo" style="width:48px; height:48px; border-radius:12px; box-shadow:0 8px 16px rgba(0,0,0,0.25);">
+          <div>
+            <h2 style="font-size:26px; font-weight:800; letter-spacing:-0.02em; line-height:1;">SIRSA</h2>
+            <div style="font-size:11.5px; opacity:0.85; margin-top:2px;">Sistem Informasi Pengaduan Masyarakat Berbasis AI</div>
+          </div>
+        </div>
+
+        <div class="auth-badge-pill">
+          <span>✨ Versi AI v2.1 Aktif</span>
+          <span>• Akurasi 92.4%</span>
+        </div>
+
+        <h3 style="font-size:26px; font-weight:800; line-height:1.25; margin-bottom:12px;">
+          Layanan Publik Pintar, Transparan & Cepat Tanggap
+        </h3>
+        <p style="font-size:13.5px; opacity:0.9; line-height:1.6;">
+          Daftarkan akun warga Anda untuk menyampaikan aspirasi atau masuk sebagai staf dinas terkait untuk menindaklanjuti keluhan masyarakat.
+        </p>
+
+        <div class="auth-features-list">
+          <div class="auth-feature-chip">
+            <div class="auth-feature-icon">🤖</div>
+            <div>
+              <div style="font-weight:700; font-size:13px;">Otomatisasi NLP Cerdas</div>
+              <div style="font-size:11.5px; opacity:0.8;">Klasifikasi sektor & bobot prioritas darurat secara live.</div>
+            </div>
+          </div>
+
+          <div class="auth-feature-chip">
+            <div class="auth-feature-icon">📍</div>
+            <div>
+              <div style="font-weight:700; font-size:13px;">Geotagging & Presisi Lokasi</div>
+              <div style="font-size:11.5px; opacity:0.8;">Pelaporan titik koordinat akurat untuk respon petugas cepat.</div>
+            </div>
+          </div>
+
+          <div class="auth-feature-chip">
+            <div class="auth-feature-icon">🛡️</div>
+            <div>
+              <div style="font-weight:700; font-size:13px;">Verifikasi NIK & Keamanan Data</div>
+              <div style="font-size:11.5px; opacity:0.8;">Perlindungan privasi warga terjamin dan akuntabel.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="font-size:11.5px; opacity:0.75; margin-top:32px;">
+        © 2026 SIRSA • Pemerintah Kota & Dinas Kominfo
+      </div>
+    </div>
+
+    <!-- Right Form Section -->
+    <div class="auth-form-container">
+      <!-- Main Switch Tabs: Masuk (Login) vs Daftar Akun Baru (Register) -->
+      <div class="auth-main-switch-tabs">
+        <button type="button" class="auth-switch-btn active" id="tab-btn-login" onclick="switchAuthTab('login')">
+          <span>🔑 Masuk Akun</span>
+        </button>
+        <button type="button" class="auth-switch-btn" id="tab-btn-register" onclick="switchAuthTab('register')">
+          <span>✨ Daftar Akun Baru</span>
+        </button>
+      </div>
+
+      <!-- ==============================================
+           PANEL 1: FORM MASUK (LOGIN)
+           ============================================== -->
+      <div id="panel-login-view">
+        <div style="margin-bottom:20px;">
+          <h2 style="font-size:22px; font-weight:800; color:#0f172a; margin-bottom:4px;">Selamat Datang Kembali</h2>
+          <p style="font-size:13px; color:#64748b;">Silakan pilih peran dan masukkan kredensial akun Anda.</p>
+        </div>
+
+        <!-- Role Chips -->
+        <div class="sub-role-tabs">
+          <button type="button" class="sub-role-chip active" id="role-admin-chip" onclick="switchLoginRole('admin')">
+            👨‍💼 Petugas / Admin Kota
+          </button>
+          <button type="button" class="sub-role-chip" id="role-warga-chip" onclick="switchLoginRole('warga')">
+            👤 Warga / Pelapor
+          </button>
+        </div>
+
+        <!-- 1-Click Demo Helper -->
+        <div class="demo-credentials-banner" id="demo-banner">
+          <div style="width:100%; margin-bottom:6px;">
+            <span style="font-size:11px; color:#1e40af; font-weight:800; display:block; letter-spacing:0.04em;">⚡ 1-KLIK MASUK DEMO CEPAT:</span>
+          </div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap; width:100%;">
+            <button type="button" class="demo-quick-btn" onclick="quickFillDemo('admin.kominfo@jakarta.go.id', 'admin', 'admin')">
+              👨‍💼 Admin Kominfo
+            </button>
+            <button type="button" class="demo-quick-btn" style="background:#0284c7;" onclick="quickFillDemo('budi.santoso@warga.id', 'warga', 'warga')">
+              👤 Warga Budi
+            </button>
+            <button type="button" class="demo-quick-btn" style="background:#0d9488;" onclick="quickFillDemo('siti.rahmawati@warga.id', 'warga', 'warga')">
+              👤 Warga Siti
+            </button>
+          </div>
+        </div>
+
+        <form id="auth-login-form" onsubmit="handleLoginSubmit(event)">
+          <div class="form-group">
+            <label class="form-label" for="login-identifier" id="login-id-label">Email / NIP Petugas</label>
+            <div class="input-icon-wrapper">
+              <span class="input-icon">✉️</span>
+              <input type="text" id="login-identifier" class="form-control" placeholder="nama@instansi.go.id" value="admin.kominfo@jakarta.go.id" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <label class="form-label" for="login-password" style="margin-bottom:0;">Kata Sandi</label>
+              <a href="#" onclick="alert('Silakan hubungi helpdesk atau admin dinas untuk reset kata sandi.'); return false;" style="font-size:11.5px; color:#2563eb; font-weight:600;">Lupa Sandi?</a>
+            </div>
+            <div class="password-wrapper">
+              <input type="password" id="login-password" class="form-control" placeholder="Masukkan kata sandi Anda" value="admin" required>
+              <button type="button" class="toggle-password-btn" onclick="togglePassword('login-password', this)">👁</button>
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:22px;">
+            <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; color:#475569; cursor:pointer;">
+              <input type="checkbox" id="remember-login" checked style="accent-color:#2563eb;">
+              <span>Ingat saya di perangkat ini</span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="btn-submit-login" style="width:100%; padding:13px; font-size:14px; font-weight:700;">
+            Masuk ke Sistem SIRSA →
+          </button>
+        </form>
+
+        <div style="margin-top:22px; text-align:center; font-size:12.5px; color:#64748b;">
+          <span>Belum memiliki akun? </span>
+          <button type="button" onclick="switchAuthTab('register')" style="background:none; border:none; color:#2563eb; font-weight:700; text-decoration:underline; cursor:pointer;">
+            Daftar Akun Baru Sekarang
+          </button>
+        </div>
+      </div>
+
+
+      <!-- ==============================================
+           PANEL 2: FORM DAFTAR AKUN BARU (REGISTER)
+           ============================================== -->
+      <div id="panel-register-view" style="display:none;">
+        <div style="margin-bottom:18px;">
+          <h2 style="font-size:22px; font-weight:800; color:#0f172a; margin-bottom:4px;">Registrasi Akun Warga Baru</h2>
+          <p style="font-size:12.5px; color:#64748b;">Lengkapi data diri Anda untuk mendapatkan akses pelaporan resmi.</p>
+        </div>
+
+        <form id="auth-register-form" onsubmit="handleRegisterSubmit(event)">
+          <!-- Role selector for registration -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;">
+            <label style="border:1.5px solid #2563eb; background:#eff6ff; padding:10px 12px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:8px;">
+              <input type="radio" name="reg-role" value="Warga" checked onchange="toggleRegRole('Warga')">
+              <span style="font-size:12px; font-weight:700; color:#1d4ed8;">👤 Warga Pelapor</span>
+            </label>
+            <label style="border:1px solid #cbd5e1; background:#f8fafc; padding:10px 12px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:8px;">
+              <input type="radio" name="reg-role" value="Admin" onchange="toggleRegRole('Admin')">
+              <span style="font-size:12px; font-weight:600; color:#475569;">👨‍💼 Petugas OPD</span>
+            </label>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+            <div class="form-group">
+              <label class="form-label" for="reg-name">Nama Lengkap Sesuai KTP <span style="color:#ef4444;">*</span></label>
+              <input type="text" id="reg-name" class="form-control" placeholder="Contoh: Rian Pratama" required>
+            </div>
+            <div class="form-group" id="reg-nik-group">
+              <label class="form-label" for="reg-nik">Nomor NIK KTP (16 Digit) <span style="color:#ef4444;">*</span></label>
+              <input type="text" id="reg-nik" class="form-control" placeholder="3171xxxxxxxxxxxx" maxlength="16" required>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+            <div class="form-group">
+              <label class="form-label" for="reg-telepon">No. WhatsApp / HP Aktif <span style="color:#ef4444;">*</span></label>
+              <input type="tel" id="reg-telepon" class="form-control" placeholder="081234567890" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-email">Alamat Email <span style="color:#ef4444;">*</span></label>
+              <input type="email" id="reg-email" class="form-control" placeholder="nama@email.com" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-wilayah">Kecamatan Domisili <span style="color:#ef4444;">*</span></label>
+            <select id="reg-wilayah" class="form-control" required>
+              <option value="Kec. Gambir">Kecamatan Gambir</option>
+              <option value="Kec. Senen">Kecamatan Senen</option>
+              <option value="Kec. Menteng">Kecamatan Menteng</option>
+              <option value="Kec. Tanah Abang">Kecamatan Tanah Abang</option>
+              <option value="Kec. Sawah Besar">Kecamatan Sawah Besar</option>
+              <option value="Kec. Kemayoran">Kecamatan Kemayoran</option>
+              <option value="Kec. Cempaka Putih">Kecamatan Cempaka Putih</option>
+              <option value="Kec. Johar Baru">Kecamatan Johar Baru</option>
+            </select>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+            <div class="form-group">
+              <label class="form-label" for="reg-password">Kata Sandi Baru <span style="color:#ef4444;">*</span></label>
+              <div class="password-wrapper">
+                <input type="password" id="reg-password" class="form-control" placeholder="Minimal 6 karakter" required oninput="checkPasswordStrength(this.value)">
+                <button type="button" class="toggle-password-btn" onclick="togglePassword('reg-password', this)">👁</button>
+              </div>
+              <div class="password-strength-meter">
+                <div class="strength-fill" id="pwd-strength-bar"></div>
+              </div>
+              <span id="pwd-strength-label" style="font-size:10.5px; color:#64748b; margin-top:2px; display:block;">Kekuatan sandi</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="reg-password-confirm">Konfirmasi Sandi <span style="color:#ef4444;">*</span></label>
+              <div class="password-wrapper">
+                <input type="password" id="reg-password-confirm" class="form-control" placeholder="Ketik ulang sandi" required>
+                <button type="button" class="toggle-password-btn" onclick="togglePassword('reg-password-confirm', this)">👁</button>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:20px;">
+            <label style="display:flex; align-items:flex-start; gap:8px; font-size:11.5px; color:#475569; cursor:pointer; line-height:1.5;">
+              <input type="checkbox" id="reg-agreement" required style="accent-color:#2563eb; margin-top:3px;">
+              <span>Saya menyatakan data yang saya masukkan adalah valid dan bersedia mematuhi aturan pelaporan fasilitas publik SIRSA.</span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="btn-submit-register" style="width:100%; padding:13px; font-size:14px; font-weight:700;">
+            🚀 Buat Akun & Masuk Sekarang
+          </button>
+        </form>
+
+        <div style="margin-top:18px; text-align:center; font-size:12.5px; color:#64748b;">
+          <span>Sudah memiliki akun? </span>
+          <button type="button" onclick="switchAuthTab('login')" style="background:none; border:none; color:#2563eb; font-weight:700; text-decoration:underline; cursor:pointer;">
+            Masuk ke Akun Anda
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick skip to dashboard -->
+      <div style="margin-top:24px; padding-top:16px; border-top:1px solid #f1f5f9; text-align:center;">
+        <a href="index.html#dashboard" style="font-size:12px; color:#64748b; font-weight:600; text-decoration:none;">
+          Buka Dashboard sebagai Tamu (Mode Preview) →
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/mock-data.js"></script>
+  <script>
+    let activeLoginRole = 'admin';
+
+    function switchAuthTab(tab) {
+      const loginPanel = document.getElementById('panel-login-view');
+      const registerPanel = document.getElementById('panel-register-view');
+      const btnLogin = document.getElementById('tab-btn-login');
+      const btnRegister = document.getElementById('tab-btn-register');
+
+      if (tab === 'login') {
+        loginPanel.style.display = 'block';
+        registerPanel.style.display = 'none';
+        btnLogin.classList.add('active');
+        btnRegister.classList.remove('active');
+      } else {
+        loginPanel.style.display = 'none';
+        registerPanel.style.display = 'block';
+        btnLogin.classList.remove('active');
+        btnRegister.classList.add('active');
+      }
+    }
+
+    function switchLoginRole(role) {
+      activeLoginRole = role;
+      const chipAdmin = document.getElementById('role-admin-chip');
+      const chipWarga = document.getElementById('role-warga-chip');
+      const idLabel = document.getElementById('login-id-label');
+      const idInput = document.getElementById('login-identifier');
+      const pwdInput = document.getElementById('login-password');
+      const demoLabel = document.getElementById('demo-account-label');
+
+      if (role === 'admin') {
+        chipAdmin.classList.add('active');
+        chipWarga.classList.remove('active');
+        idLabel.textContent = 'Email / NIP Petugas';
+        idInput.value = 'admin.kominfo@jakarta.go.id';
+        idInput.placeholder = 'nama@instansi.go.id';
+        pwdInput.value = 'admin';
+        demoLabel.textContent = 'admin.kominfo@jakarta.go.id (Sandi: admin)';
+      } else {
+        chipWarga.classList.add('active');
+        chipAdmin.classList.remove('active');
+        idLabel.textContent = 'NIK KTP / Email Warga';
+        idInput.value = '3171012304920001';
+        idInput.placeholder = '16 digit NIK atau Email Warga';
+        pwdInput.value = 'warga';
+        demoLabel.textContent = 'NIK: 3171012304920001 (Budi Santoso, Sandi: warga)';
+      }
+    }
+
+    function fillDemoLogin() {
+      switchLoginRole(activeLoginRole);
+    }
+
+    function quickFillDemo(identifier, password, role) {
+      switchLoginRole(role);
+      const idInput = document.getElementById('login-identifier');
+      const pwdInput = document.getElementById('login-password');
+      if (idInput) idInput.value = identifier;
+      if (pwdInput) pwdInput.value = password;
+    }
+
+    function playLoginChime() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.35);
+      } catch (e) {}
+    }
+
+    function togglePassword(inputId, btn) {
+      const input = document.getElementById(inputId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = '🔒';
+      } else {
+        input.type = 'password';
+        btn.textContent = '👁';
+      }
+    }
+
+    function checkPasswordStrength(val) {
+      const bar = document.getElementById('pwd-strength-bar');
+      const label = document.getElementById('pwd-strength-label');
+      let score = 0;
+      if (val.length >= 6) score += 35;
+      if (val.length >= 8) score += 25;
+      if (/[A-Z]/.test(val)) score += 20;
+      if (/[0-9]/.test(val)) score += 20;
+
+      bar.style.width = score + '%';
+      if (score < 40) {
+        bar.style.backgroundColor = '#ef4444';
+        label.textContent = 'Kekuatan: Lemah (minimal 6 karakter)';
+        label.style.color = '#ef4444';
+      } else if (score < 75) {
+        bar.style.backgroundColor = '#f59e0b';
+        label.textContent = 'Kekuatan: Cukup Baik';
+        label.style.color = '#d97706';
+      } else {
+        bar.style.backgroundColor = '#10b981';
+        label.textContent = 'Kekuatan: Sangat Kuat & Aman';
+        label.style.color = '#059669';
+      }
+    }
+
+    function toggleRegRole(role) {
+      const nikGroup = document.getElementById('reg-nik-group');
+      if (role === 'Admin') {
+        nikGroup.querySelector('label').innerHTML = 'Nomor NIP Pegawai <span style="color:#ef4444;">*</span>';
+        document.getElementById('reg-nik').placeholder = '18 digit NIP';
+      } else {
+        nikGroup.querySelector('label').innerHTML = 'Nomor NIK KTP (16 Digit) <span style="color:#ef4444;">*</span>';
+        document.getElementById('reg-nik').placeholder = '3171xxxxxxxxxxxx';
+      }
+    }
+
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const id = document.getElementById('login-identifier').value.trim();
+      const pwd = document.getElementById('login-password').value;
+      const btn = document.getElementById('btn-submit-login');
+
+      btn.disabled = true;
+      btn.innerHTML = 'Memverifikasi akun...';
+
+      setTimeout(() => {
+        const res = authenticateUser(id, pwd, activeLoginRole);
+        if (res.success) {
+          playLoginChime();
+          btn.innerHTML = '✓ Berhasil Masuk!';
+          setTimeout(() => {
+            window.location.href = res.user.role === 'Admin' ? 'index.html#dashboard' : 'index.html#form';
+          }, 350);
+        } else {
+          alert(res.message);
+          btn.disabled = false;
+          btn.innerHTML = 'Masuk ke Sistem SIRSA →';
+        }
+      }, 450);
+    }
+
+    function handleRegisterSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('reg-name').value.trim();
+      const nik = document.getElementById('reg-nik').value.trim();
+      const telepon = document.getElementById('reg-telepon').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const wilayah = document.getElementById('reg-wilayah').value;
+      const password = document.getElementById('reg-password').value;
+      const confirmPwd = document.getElementById('reg-password-confirm').value;
+      const role = document.querySelector('input[name="reg-role"]:checked')?.value || 'Warga';
+      const btn = document.getElementById('btn-submit-register');
+
+      if (password !== confirmPwd) {
+        alert('Konfirmasi kata sandi tidak cocok. Harap periksa kembali.');
+        return;
+      }
+
+      if (role === 'Warga' && nik.length < 16) {
+        alert('NIK harus terdiri dari 16 digit angka sesuai KTP.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = 'Mendaftarkan akun...';
+
+      setTimeout(() => {
+        const res = registerAccount({
+          name,
+          nik,
+          telepon,
+          email,
+          wilayah,
+          role,
+          password
+        });
+
+        if (res.success) {
+          playLoginChime();
+          alert(`Selamat, ${name}! Akun ${role} Anda berhasil terdaftar. Anda akan langsung dialihkan ke dalam portal SIRSA.`);
+          window.location.href = role === 'Admin' ? 'index.html#dashboard' : 'index.html#form';
+        } else {
+          alert(res.message);
+          btn.disabled = false;
+          btn.innerHTML = '🚀 Buat Akun & Masuk Sekarang';
+        }
+      }, 600);
+    }
+  </script>
+</body>
+</html>
