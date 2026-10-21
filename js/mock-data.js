@@ -31,9 +31,9 @@ const INITIAL_REGISTERED_USERS = [
     email: 'budi.santoso@warga.id',
     nik: '3171012304920001',
     telepon: '081234567890',
-    wilayah: 'Kec. Menteng',
+    wilayah: 'Kec. Pangkah',
     role: 'Warga',
-    department: 'Warga Terverifikasi',
+    department: 'Warga Pangkah',
     password: 'warga',
     verified: true,
     joinedDate: '12 Feb 2026'
@@ -44,9 +44,9 @@ const INITIAL_REGISTERED_USERS = [
     email: 'siti.rahmawati@warga.id',
     nik: '3171025508880003',
     telepon: '082198765432',
-    wilayah: 'Kec. Senen',
+    wilayah: 'Kec. Pangkah',
     role: 'Warga',
-    department: 'Warga Terverifikasi',
+    department: 'Warga Pangkah',
     password: 'warga',
     verified: true,
     joinedDate: '01 Mar 2026'
@@ -320,7 +320,19 @@ function getRegisteredAccounts() {
     return INITIAL_REGISTERED_USERS;
   }
   try {
-    return JSON.parse(data);
+    const accounts = JSON.parse(data);
+    let changed = false;
+    accounts.forEach(acc => {
+      if (acc.id === 'usr-warga-1' || acc.id === 'usr-warga-2' || acc.wilayah === 'Kec. Menteng' || acc.wilayah === 'Kec. Senen') {
+        acc.wilayah = 'Kec. Pangkah';
+        acc.department = 'Warga Pangkah';
+        changed = true;
+      }
+    });
+    if (changed) {
+      localStorage.setItem(STORAGE_KEY_REGISTERED, JSON.stringify(accounts));
+    }
+    return accounts;
   } catch (e) {
     return INITIAL_REGISTERED_USERS;
   }
@@ -413,7 +425,13 @@ function getCurrentUser() {
   const user = localStorage.getItem(STORAGE_KEY_AUTH);
   if (user) {
     try {
-      return JSON.parse(user);
+      const u = JSON.parse(user);
+      if (u.id === 'usr-warga-1' || u.id === 'usr-warga-2' || u.wilayah === 'Kec. Menteng' || u.wilayah === 'Kec. Senen') {
+        u.wilayah = 'Kec. Pangkah';
+        u.department = 'Warga Pangkah';
+        localStorage.setItem(STORAGE_KEY_AUTH, JSON.stringify(u));
+      }
+      return u;
     } catch (e) {}
   }
   const defaultAdmin = INITIAL_REGISTERED_USERS[0];
